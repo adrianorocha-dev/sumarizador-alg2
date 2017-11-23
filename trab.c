@@ -16,6 +16,8 @@ typedef struct wordList {
 
 void countWords(const char *filename, WordList *list);
 int searchWordInList(char *word, WordList *list);
+int isStopWord(char *word);
+void sortWords(WordList *list);
 
 void main() {
     int op;
@@ -34,6 +36,7 @@ void main() {
     quantPalavras = toint(input("Informe o tamanho do resumo (a quantidade de palavras):"));
 
     countWords(filePath, lista);
+    sortWords(lista);
 
     for (int i = 1; i <= lista->length; i++) {
         printf("%-20s %d\n", lista->palavras[i].valor, lista->palavras[i].quant);
@@ -72,4 +75,25 @@ int searchWordInList(char *word, WordList *list) {
     for (i = list->length; strcmp(list->palavras[i].valor, word) != 0; i--);
 
     return i;
+}
+
+int isStopWord(char *word) {
+
+}
+
+void sortWords(WordList *list) {
+    int j;
+    Palavra aux;
+
+    for (int i = 2; i <= list->length; i++) {
+        aux = list->palavras[i];
+        j = i-1;
+
+        while ((j >= 1) && (aux.quant > list->palavras[j].quant)) {
+            list->palavras[j+1] = list->palavras[j];
+            j--;
+        }
+
+        list->palavras[j+1] = aux;
+    }
 }
