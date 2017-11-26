@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char * input(char *message);
+char * input(char *message); // imprime uma mensagem na tela e solicita a entrada do usuário, então é retornada a string digitada pelo usuário
 
-int toint(char *charV);
-int tofloat(char *charV);
-
-void print(char *message, ...);
-void printN(int n);
-
-char * strformat(char *str, ...);
+int toint(char *charV); // converte uma string em inteiro
+int tofloat(char *charV); // converte uma string em float
 
 char * input(char *message) {
     char *temp = malloc(255);
@@ -20,14 +15,6 @@ char * input(char *message) {
 
 int toint(char *charV) {
     int r = atoi(charV);
-    // if (r == 0) {
-    //     for (int i = 0; charV[i] != '\0'; i++) {
-    //         if (charV[i] != '0') {
-    //             r = charV[0];
-    //             break;
-    //         }
-    //     }
-    // }
     return r;
 }
 

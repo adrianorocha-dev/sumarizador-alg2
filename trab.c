@@ -2,23 +2,25 @@
 #include "lib/yostring.h"
 #include <stdio.h>
 #include <string.h>
-#define MAX 1000
+#define MAX 10000
 
-typedef struct palavra {
+/* Estrutura para guardar uma palavra encontrada no texto e a sua respectiva quantidade */
+typedef struct {
     char valor[50];
     int quant;
 } Palavra;
 
-typedef struct wordList {
+/* Estrutura para guardar a lista de palavras do texto */
+typedef struct {
     Palavra palavras[MAX+1];
     int length;
 } WordList;
 
-void countWords(const char *filename, WordList *list);
-int searchWordInList(char *word, WordList *list);
-int isStopWord(char *word, char *language);
-void sortWords(WordList *list);
-void showImportantWords(WordList *list, int size);
+void countWords(const char *filename, WordList *list); // Função para abrir o arquivo de texto e guardar todas as suas palavras na lista
+int searchWordInList(char *word, WordList *list); // Verifica se uma palavra já está incluída na lista de palavras
+int isStopWord(char *word, char *language); // Verifica se uma palavra está na lista de stopwords para o idioma especificado
+void sortWords(WordList *list); // Função para ordenar a lista de palavras em ordem decrescente com relação à quantidade de repetições no texto
+void showImportantWords(WordList *list, int n); // Exibe a lista das n palavras que mais aparecem no texto
 
 void main() {
     int op;
@@ -39,10 +41,6 @@ void main() {
     countWords(filePath, lista);
     sortWords(lista);
     showImportantWords(lista, quantPalavras);
-
-    /*for (int i = 1; i <= lista->length; i++) {
-        printf("%-20s %d\n", lista->palavras[i].valor, lista->palavras[i].quant);
-    }*/
 }
 
 void countWords(const char *filename, WordList * list) {
@@ -123,8 +121,8 @@ void sortWords(WordList *list) {
     }
 }
 
-void showImportantWords(WordList *list, int size) {
-    for (int i = 1; i <= size; i++) {
-        printf("%-20s %02d\n", list->palavras[i].valor, list->palavras[i].quant);
+void showImportantWords(WordList *list, int n) {
+    for (int i = 1; i <= n; i++) {
+        printf("%-20s %2d\n", list->palavras[i].valor, list->palavras[i].quant);
     }
 }

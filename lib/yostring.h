@@ -3,8 +3,8 @@ int strLen(char *str); // Retorna o tamanho de uma string.
 char * strtoup(char *str); // Converte todas as letras de uma string para maiúsculo.
 char * strtolow(char *str); // Converte todas as letras de uma string para minúsculo.
 
-char *removeSpecialChars(char *str); // Remove quaisquer caracteres especiais (não-letras) de uma string
-int thereIsSpecialChar(char *str);
+char *removeSpecialChars(char *str); // Remove quaisquer caracteres especiais de uma string
+int thereIsSpecialChar(char *str); // Verifica se uma string contém caracteres especiais
 
 int strLen(char *str) {
     int i;
