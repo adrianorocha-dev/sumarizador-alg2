@@ -16,11 +16,12 @@ typedef struct wordList {
 
 void countWords(const char *filename, WordList *list);
 int searchWordInList(char *word, WordList *list);
-int isStopWord(char *word);
+int isStopWord(char *word, char *language);
 void sortWords(WordList *list);
+void showImportantWords(WordList *list, int size);
 
 void main() {
-    /*int op;
+    int op;
     char *filePath;
     int quantPalavras;
 
@@ -37,14 +38,11 @@ void main() {
 
     countWords(filePath, lista);
     sortWords(lista);
+    showImportantWords(lista, quantPalavras);
 
-    for (int i = 1; i <= lista->length; i++) {
+    /*for (int i = 1; i <= lista->length; i++) {
         printf("%-20s %d\n", lista->palavras[i].valor, lista->palavras[i].quant);
     }*/
-
-    char *teste = input("Entre uma palavra:");
-
-    printf("É invalida: %d\n", isStopWord(teste));
 }
 
 void countWords(const char *filename, WordList * list) {
@@ -57,8 +55,9 @@ void countWords(const char *filename, WordList * list) {
     int i = 0;
     char aux[50];
     while (fscanf(file, "%s ", aux) == 1) {
+        removeSpecialChars(aux);
         int isOnList = searchWordInList(aux, list);
-        if (isOnList > 0) {
+        if (isOnList > 0 && !isStopWord(aux, "pt-BR")) {
             list->palavras[isOnList].quant++;
         } else {
             list->length++;
@@ -76,34 +75,23 @@ int searchWordInList(char *word, WordList *list) {
     list->palavras[0] = aux;
 
     int i;
-    for (i = list->length; strcmp(list->palavras[i].valor, word) != 0; i--);
+    for (i = list->length; strcmp(strtoup(list->palavras[i].valor), strtoup(word)) != 0; i--);
 
     return i;
 }
 
-int isStopWord(char *word) {
-    /* ENGLISH */
-    FILE *stopwords = fopen("stopwords_en.txt", "r");
+int isStopWord(char *word, char *language) {
+    FILE *stopwords;
 
-    if (stopwords == NULL) {
-        printf("Erro ao abrir o arquivo de stopwords em inglês.\n");
-        exit(1);
+    if (strcmp(language, "en") == 0) {
+        stopwords = fopen("stopwords_en.txt", "r");
+    } else if (strcmp(language, "pt-BR") == 0) {
+        stopwords = fopen("stopwords_pt-BR.txt", "r");
     }
 
-    int i = 0;
-    char aux[50];
-    while (fscanf(stopwords, "%s ", aux) == 1) {
-        if (strcmp(strtoup(word), strtoup(aux)) == 0) {
-            return 1;
-        }
-    }
-    fclose(stopwords);
-
-    /* PORTUGUESE */
-    stopwords = fopen("stopwords_pt-BR.txt", "r");
 
     if (stopwords == NULL) {
-        printf("Erro ao abrir o arquivo de stopwords em português.\n");
+        printf("Erro. Arquivo de stopwords inexistente para o idioma selecionado.\n");
         exit(1);
     }
 
@@ -132,5 +120,11 @@ void sortWords(WordList *list) {
         }
 
         list->palavras[j+1] = aux;
+    }
+}
+
+void showImportantWords(WordList *list, int size) {
+    for (int i = 1; i <= size; i++) {
+        printf("%-20s %02d\n", list->palavras[i].valor, list->palavras[i].quant);
     }
 }
